@@ -1,12 +1,10 @@
 ---
 title: "Fall recipe: roasted squash soup"
-date: 2026-11-08
 lang: en
+date: 2026-11-08
 description: A sample draft post. Replace it with one of your own recipes.
-image: ""
-draft: true
+draft: false
 ---
-
 This is a sample draft. It shows on preview links only, never on the live site. Rewrite it with your own recipe, or delete it.
 
 When the evenings get cooler, this is one of the soups we make most often.
@@ -28,3 +26,4 @@ When the evenings get cooler, this is one of the soups we make most often.
 3. Add the squash and the stock. Let it simmer for 15 minutes.
 4. Blend until smooth. Season with salt, pepper and nutmeg.
 5. Stir in a little cream before serving.
+
