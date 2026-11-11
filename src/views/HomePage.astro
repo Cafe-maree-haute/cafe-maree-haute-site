@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PhotoSpot from '../components/PhotoSpot.astro';
 import Hours from '../components/Hours.astro';
 import PostGrid from '../components/PostGrid.astro';
 import { routes, t, type Lang } from '../i18n/ui';
@@ -26,6 +25,7 @@ const copy = {
     ],
     cta: 'See the menu',
     photoAlt: 'The café from the outside',
+    introTitle: 'A little about us',
     visitTitle: 'Come see us',
     visitLink: 'How to find us',
   },
@@ -40,6 +40,7 @@ const copy = {
     ],
     cta: 'Voir le menu',
     photoAlt: 'Le café vu de l’extérieur',
+    introTitle: 'Un peu sur nous',
     visitTitle: 'Venez nous voir',
     visitLink: 'Comment nous trouver',
   },
@@ -47,15 +48,31 @@ const copy = {
 ---
 
 <BaseLayout lang={lang} title={copy.title} description={copy.description} page="home">
+  <section class="hero" aria-labelledby="hero-title">
+    {
+      site.photos.home ? (
+        <img class="hero-photo" src={site.photos.home} alt={copy.photoAlt} fetchpriority="high" />
+      ) : (
+        <div class="hero-placeholder" role="img" aria-label={`${t(lang, 'photo.soon')}: ${copy.photoAlt}`}>
+          <svg class="hero-waves" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 120 C 240 70, 480 170, 720 120 S 1200 70, 1440 120 V220 H0 Z" fill="rgba(255,255,255,0.08)" />
+            <path d="M0 160 C 260 120, 520 200, 780 160 S 1240 120, 1440 160 V220 H0 Z" fill="rgba(243,232,214,0.18)" />
+          </svg>
+          <span class="hero-photo-tag">{t(lang, 'photo.soon')}</span>
+        </div>
+      )
+    }
+    <div class="container hero-content">
+      <h1 id="hero-title">{copy.heading}</h1>
+      <p class="hero-lead">{copy.lead}</p>
+      <p><a class="button hero-button" href={routes.menu[lang]}>{copy.cta}</a></p>
+    </div>
+  </section>
+
   <section class="section">
-    <div class="container grid-2">
-      <div>
-        <h1>{copy.heading}</h1>
-        <p class="lead">{copy.lead}</p>
-        {copy.body.map((p) => <p>{p}</p>)}
-        <p><a class="button" href={routes.menu[lang]}>{copy.cta}</a></p>
-      </div>
-      <PhotoSpot lang={lang} src={site.photos.home} alt={copy.photoAlt} />
+    <div class="container intro">
+      <h2>{copy.introTitle}</h2>
+      {copy.body.map((p) => <p>{p}</p>)}
     </div>
   </section>
 
@@ -83,6 +100,101 @@ const copy = {
 </BaseLayout>
 
 <style>
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: 70vh;
+    min-height: 70svh;
+    overflow: hidden;
+    background: var(--sea-deep);
+    color: #fff;
+  }
+
+  .hero-photo,
+  .hero-placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-photo {
+    object-fit: cover;
+  }
+
+  /* Shown until a real photo is added in src/data/site.ts. */
+  .hero-placeholder {
+    background:
+      radial-gradient(ellipse at 75% 15%, rgba(255, 244, 220, 0.55), transparent 55%),
+      linear-gradient(180deg, #9cc3cf 0%, #4f86a3 45%, var(--sea) 70%, var(--sea-deep) 100%);
+  }
+
+  .hero-waves {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 35%;
+  }
+
+  .hero-photo-tag {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(255, 250, 242, 0.85);
+    color: var(--sea-deep);
+  }
+
+  /* Darkens the bottom of the picture so the text stays easy to read. */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(20, 40, 55, 0) 30%, rgba(20, 40, 55, 0.75) 100%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    padding-top: 4rem;
+    padding-bottom: 3rem;
+  }
+
+  .hero h1 {
+    color: #fff;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    max-width: 18ch;
+    margin: 0 0 0.75rem;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  }
+
+  .hero-lead {
+    font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+    max-width: 36ch;
+    margin: 0 0 1.5rem;
+    color: #f4f1ea;
+  }
+
+  .hero-button {
+    background: var(--light);
+    color: var(--sea-deep);
+  }
+
+  .hero-button:hover {
+    background: var(--sand);
+    color: var(--sea-deep);
+  }
+
+  .intro {
+    max-width: 44rem;
+  }
+
   .all-posts {
     margin-top: 1.5rem;
     font-weight: 600;
