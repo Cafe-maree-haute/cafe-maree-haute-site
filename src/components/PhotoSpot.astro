@@ -1,0 +1,62 @@
+---
+// Shows a photo when one is set. Otherwise shows a clearly marked empty spot
+// where a photo of the café will go.
+import { t, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  src?: string | null;
+  /** Describes the photo. Used for screen readers and shown on the empty spot. */
+  alt: string;
+  ratio?: string;
+}
+
+const { lang, src, alt, ratio = '4 / 3' } = Astro.props;
+---
+
+{
+  src ? (
+    <img class="photo" src={src} alt={alt} style={`aspect-ratio: ${ratio}`} loading="lazy" />
+  ) : (
+    <div class="photo-spot" style={`aspect-ratio: ${ratio}`} role="img" aria-label={`${t(lang, 'photo.soon')}: ${alt}`}>
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <circle cx="12" cy="13" r="3.5" />
+      </svg>
+      <span class="photo-spot-title">{t(lang, 'photo.soon')}</span>
+      <span class="photo-spot-alt">{alt}</span>
+    </div>
+  )
+}
+
+<style>
+  .photo {
+    width: 100%;
+    object-fit: cover;
+    border-radius: var(--radius);
+  }
+
+  .photo-spot {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    text-align: center;
+    padding: 1rem;
+    border: 2px dashed var(--sand-deep);
+    border-radius: var(--radius);
+    background: repeating-linear-gradient(135deg, var(--sand), var(--sand) 12px, #efe2cc 12px, #efe2cc 24px);
+    color: var(--muted);
+  }
+
+  .photo-spot-title {
+    font-weight: 600;
+    color: var(--sea-deep);
+  }
+
+  .photo-spot-alt {
+    font-size: 0.9rem;
+  }
+</style>

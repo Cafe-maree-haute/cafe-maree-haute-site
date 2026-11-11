@@ -1,0 +1,70 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PhotoSpot from '../components/PhotoSpot.astro';
+import { formatDate, routes, t, otherLang } from '../i18n/ui';
+import { getPosts, postSlug, postUrl, type Post } from '../lib/posts';
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { title, date, description, image, draft, lang } = post.data;
+const { Content } = await render(post);
+
+// The language button goes to the same post in the other language when it
+// exists (same file name, ending in -en or -fr). Otherwise it goes to the blog.
+const other = otherLang(lang);
+const twin = (await getPosts(other)).find((p) => postSlug(p) === postSlug(post));
+const altHref = twin ? postUrl(twin) : routes.blog[other];
+---
+
+<BaseLayout lang={lang} title={title} description={description} page="blog" altHref={altHref}>
+  <article class="section">
+    <div class="container narrow">
+      <p class="back"><a href={routes.blog[lang]}>← {t(lang, 'blog.back')}</a></p>
+      <p class="meta">
+        <time datetime={date.toISOString()}>{formatDate(date, lang)}</time>
+        {draft && <span class="badge">{t(lang, 'draft.badge')}</span>}
+      </p>
+      <h1>{title}</h1>
+      {description && <p class="lead">{description}</p>}
+      <div class="hero">
+        <PhotoSpot lang={lang} src={image} alt={title} ratio="3 / 2" />
+      </div>
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .back {
+    margin: 0 0 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .meta {
+    color: var(--muted);
+    font-size: 0.95rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin: 0 0 0.25rem;
+  }
+
+  .badge {
+    background: #fff3c4;
+    color: #5a4a00;
+    border-radius: 999px;
+    padding: 0.05rem 0.6rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .hero {
+    margin: 1.5rem 0 2rem;
+  }
+</style>

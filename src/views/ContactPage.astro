@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PhotoSpot from '../components/PhotoSpot.astro';
+import Hours from '../components/Hours.astro';
+import { type Lang } from '../i18n/ui';
+import { site } from '../data/site';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const copy = {
+  en: {
+    title: 'Contact us',
+    description: 'Address, phone, email and hours for Café Marée Haute in Shediac, New Brunswick.',
+    lead: 'Drop by, give us a call or send us an email. We’d love to hear from you.',
+    address: 'Address',
+    phone: 'Phone',
+    email: 'Email',
+    photoAlt: 'The front door of the café',
+  },
+  fr: {
+    title: 'Nous joindre',
+    description: 'Adresse, téléphone, courriel et heures d’ouverture du Café Marée Haute à Shediac, au Nouveau-Brunswick.',
+    lead: 'Passez nous voir, appelez-nous ou écrivez-nous. Ça nous fait toujours plaisir d’avoir de vos nouvelles.',
+    address: 'Adresse',
+    phone: 'Téléphone',
+    email: 'Courriel',
+    photoAlt: 'La porte d’entrée du café',
+  },
+}[lang];
+---
+
+<BaseLayout lang={lang} title={copy.title} description={copy.description} page="contact">
+  <section class="section">
+    <div class="container">
+      <h1>{copy.title}</h1>
+      <p class="lead narrow">{copy.lead}</p>
+    </div>
+    <div class="container grid-2 contact-grid">
+      <div class="card">
+        <h3>{copy.address}</h3>
+        <address>
+          {site.name}<br />
+          {site.address.street}<br />
+          {site.address.city}&nbsp; {site.address.postalCode}
+        </address>
+        <h3>{copy.phone}</h3>
+        <p><a href={`tel:${site.phone.replace(/[^0-9+]/g, '')}`}>{site.phone}</a></p>
+        <h3>{copy.email}</h3>
+        <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+      </div>
+      <Hours lang={lang} />
+    </div>
+    <div class="container photo">
+      <PhotoSpot lang={lang} src={site.photos.contact} alt={copy.photoAlt} ratio="16 / 9" />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-grid {
+    align-items: start;
+    margin-top: 1.5rem;
+  }
+
+  address {
+    font-style: normal;
+    margin-bottom: 1.25rem;
+  }
+
+  .card h3 + p {
+    margin-top: 0;
+  }
+
+  .photo {
+    margin-top: 2rem;
+  }
+</style>
