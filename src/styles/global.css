@@ -1,0 +1,160 @@
+/* Café Marée Haute: sand, sea blue and soft light. */
+:root {
+  --sand: #f3e8d6;
+  --sand-deep: #e6d5b8;
+  --light: #fffaf2;
+  --sea: #2f5f7f;
+  --sea-deep: #1d3d52;
+  --seafoam: #8fb8b0;
+  --ink: #2a2a28;
+  --muted: #6b665c;
+  --line: #ddcfb6;
+  --radius: 14px;
+  --max: 68rem;
+  --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--light);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--sea);
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: var(--sea-deep);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--serif);
+  color: var(--sea-deep);
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: clamp(2rem, 6vw, 3rem);
+  margin: 0 0 0.75rem;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  margin: 2.5rem 0 1rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+  margin: 0 0 0.5rem;
+}
+
+:focus-visible {
+  outline: 3px solid var(--seafoam);
+  outline-offset: 2px;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.narrow {
+  max-width: 42rem;
+}
+
+.lead {
+  font-size: 1.2rem;
+  color: var(--muted);
+}
+
+.section {
+  padding: 2.5rem 0;
+}
+
+.section-sand {
+  background: var(--sand);
+}
+
+.button {
+  display: inline-block;
+  padding: 0.7rem 1.2rem;
+  border-radius: 999px;
+  background: var(--sea);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.button:hover {
+  background: var(--sea-deep);
+  color: #fff;
+}
+
+.grid-2 {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+}
+
+@media (min-width: 48rem) {
+  .grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--sea-deep);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  z-index: 10;
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
+.prose img {
+  border-radius: var(--radius);
+  margin: 1.5rem 0;
+}
+
+.prose h2 {
+  margin-top: 2rem;
+}

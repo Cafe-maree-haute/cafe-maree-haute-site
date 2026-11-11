@@ -1,0 +1,55 @@
+---
+import { hours, openTimes } from '../data/site';
+import { t, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+
+<div class="hours card">
+  <h3>{t(lang, 'hours.title')}</h3>
+  <dl>
+    {
+      hours.map((day) => (
+        <div class:list={['row', { closed: !day.open }]}>
+          <dt>{lang === 'fr' ? day.fr.charAt(0).toUpperCase() + day.fr.slice(1) : day.en}</dt>
+          <dd>{day.open ? openTimes[lang] : t(lang, 'hours.closed')}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</div>
+
+<style>
+  dl {
+    margin: 0;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px dashed var(--line);
+  }
+
+  .row:last-child {
+    border-bottom: 0;
+  }
+
+  dt {
+    font-weight: 600;
+  }
+
+  dd {
+    margin: 0;
+    text-align: right;
+  }
+
+  .closed {
+    color: var(--muted);
+  }
+</style>

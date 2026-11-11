@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PhotoSpot from '../components/PhotoSpot.astro';
+import Hours from '../components/Hours.astro';
+import PostGrid from '../components/PostGrid.astro';
+import { routes, t, type Lang } from '../i18n/ui';
+import { site, hoursSummary } from '../data/site';
+import { getPosts } from '../lib/posts';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const latest = (await getPosts(lang)).slice(0, 3);
+
+const copy = {
+  en: {
+    title: 'Seaside café in Shediac',
+    description: 'A small seaside café in Shediac, New Brunswick. Locally roasted coffee, house-made pastries and a daily soup.',
+    heading: 'Coffee, pastries and soup by the sea',
+    lead: 'Café Marée Haute is a small café in Shediac, a short walk from the water.',
+    body: [
+      'We serve locally roasted coffee, pastries we bake every morning and a fresh soup every day.',
+      'Locals come in for their usual. Summer visitors find us on the way to the beach. Everyone gets the same warm welcome.',
+    ],
+    cta: 'See the menu',
+    photoAlt: 'The café from the outside',
+    visitTitle: 'Come see us',
+    visitLink: 'How to find us',
+  },
+  fr: {
+    title: 'Café au bord de la mer à Shediac',
+    description: 'Un petit café au bord de la mer à Shediac, au Nouveau-Brunswick. Café torréfié tout près d’ici, pâtisseries maison et soupe du jour.',
+    heading: 'Du bon café, des pâtisseries et de la soupe au bord de la mer',
+    lead: 'Café Marée Haute, c’est un petit café à Shediac, à quelques pas de l’eau.',
+    body: [
+      'On sert du café torréfié tout près d’ici, des pâtisseries qu’on fait chaque matin et une soupe fraîche tous les jours.',
+      'Les gens de la place viennent chercher leur café habituel, et les visiteurs d’été nous trouvent en s’en allant à la plage. Tout le monde est bienvenu.',
+    ],
+    cta: 'Voir le menu',
+    photoAlt: 'Le café vu de l’extérieur',
+    visitTitle: 'Venez nous voir',
+    visitLink: 'Comment nous trouver',
+  },
+}[lang];
+---
+
+<BaseLayout lang={lang} title={copy.title} description={copy.description} page="home">
+  <section class="section">
+    <div class="container grid-2">
+      <div>
+        <h1>{copy.heading}</h1>
+        <p class="lead">{copy.lead}</p>
+        {copy.body.map((p) => <p>{p}</p>)}
+        <p><a class="button" href={routes.menu[lang]}>{copy.cta}</a></p>
+      </div>
+      <PhotoSpot lang={lang} src={site.photos.home} alt={copy.photoAlt} />
+    </div>
+  </section>
+
+  <section class="section section-sand">
+    <div class="container grid-2">
+      <div>
+        <h2>{copy.visitTitle}</h2>
+        <p class="lead">{hoursSummary[lang]}</p>
+        <p>
+          {site.address.street}, {site.address.city}
+        </p>
+        <p><a href={routes.contact[lang]}>{copy.visitLink}</a></p>
+      </div>
+      <Hours lang={lang} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>{t(lang, 'blog.latest')}</h2>
+      <PostGrid posts={latest} lang={lang} />
+      {latest.length > 0 && <p class="all-posts"><a href={routes.blog[lang]}>{t(lang, 'blog.all')}</a></p>}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .all-posts {
+    margin-top: 1.5rem;
+    font-weight: 600;
+  }
+</style>

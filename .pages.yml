@@ -1,0 +1,116 @@
+# Pages CMS settings (https://pagescms.org)
+# Lets you write blog posts and edit the menu without touching code.
+
+media:
+  input: public/images
+  output: /images
+
+content:
+  - name: blog
+    label: Blog / Blogue
+    type: collection
+    path: src/content/blog
+    filename: "{year}-{month}-{day}-{primary}.md"
+    format: yaml-frontmatter
+    view:
+      primary: title
+      fields: [title, lang, date, draft]
+      sort: [date, title]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: Title / Titre
+        type: string
+        required: true
+      - name: lang
+        label: Language / Langue
+        type: select
+        required: true
+        default: en
+        options:
+          values:
+            - value: en
+              label: English
+            - value: fr
+              label: Français
+      - name: date
+        label: Date
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: description
+        label: Short summary / Court résumé
+        description: One or two sentences shown on the blog page. / Une ou deux phrases affichées sur la page du blogue.
+        type: text
+      - name: image
+        label: Photo
+        description: Optional. Leave empty to show a photo spot. / Facultatif. Laissez vide pour garder l'espace photo.
+        type: image
+      - name: draft
+        label: Draft (hidden on the live site) / Brouillon (caché sur le site en ligne)
+        description: Turn this off when the post is ready to publish. / Désactivez quand l'article est prêt à publier.
+        type: boolean
+        default: true
+      - name: body
+        label: Post / Article
+        type: rich-text
+
+  - name: menu
+    label: Menu
+    type: file
+    path: src/data/menu.yml
+    format: yaml
+    fields:
+      - name: coffee
+        label: Coffee / Café
+        type: object
+        fields: &section
+          - name: order
+            label: Order on the page / Ordre sur la page
+            type: number
+          - name: title_en
+            label: Section name (English)
+            type: string
+          - name: title_fr
+            label: Nom de la section (français)
+            type: string
+          - name: note_en
+            label: Note (English)
+            type: string
+          - name: note_fr
+            label: Note (français)
+            type: string
+          - name: items
+            label: Items / Articles
+            type: object
+            list: true
+            fields:
+              - name: name_en
+                label: Name (English)
+                type: string
+                required: true
+              - name: name_fr
+                label: Nom (français)
+                type: string
+                required: true
+              - name: description_en
+                label: Description (English)
+                type: string
+              - name: description_fr
+                label: Description (français)
+                type: string
+              - name: price
+                label: Price / Prix (ex. 3.50)
+                type: string
+                required: true
+      - name: pastries
+        label: Pastries / Pâtisseries
+        type: object
+        fields: *section
+      - name: soup
+        label: Soup / Soupe
+        type: object
+        fields: *section

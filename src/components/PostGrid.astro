@@ -1,0 +1,43 @@
+---
+import PostCard from './PostCard.astro';
+import { t, type Lang } from '../i18n/ui';
+import type { Post } from '../lib/posts';
+
+interface Props {
+  posts: Post[];
+  lang: Lang;
+}
+
+const { posts, lang } = Astro.props;
+---
+
+{
+  posts.length === 0 ? (
+    <p>{t(lang, 'blog.none')}</p>
+  ) : (
+    <div class="post-grid">
+      {posts.map((post) => (
+        <PostCard post={post} lang={lang} />
+      ))}
+    </div>
+  )
+}
+
+<style>
+  .post-grid {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 40rem) {
+    .post-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .post-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,71 @@
+---
+import PhotoSpot from './PhotoSpot.astro';
+import { formatDate, t, type Lang } from '../i18n/ui';
+import { postUrl, type Post } from '../lib/posts';
+
+interface Props {
+  post: Post;
+  lang: Lang;
+}
+
+const { post, lang } = Astro.props;
+const { title, date, description, image, draft } = post.data;
+---
+
+<article class="post-card card">
+  <a href={postUrl(post)} class="image-link" tabindex="-1" aria-hidden="true">
+    <PhotoSpot lang={lang} src={image} alt={title} ratio="3 / 2" />
+  </a>
+  <p class="meta">
+    <time datetime={date.toISOString()}>{formatDate(date, lang)}</time>
+    {draft && <span class="badge">{t(lang, 'draft.badge')}</span>}
+  </p>
+  <h3><a href={postUrl(post)}>{title}</a></h3>
+  {description && <p>{description}</p>}
+  <a href={postUrl(post)} class="read-more">{t(lang, 'blog.read')}</a>
+</article>
+
+<style>
+  .post-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .image-link {
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .meta {
+    margin: 0 0 0.25rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  h3 a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  p {
+    margin: 0 0 0.75rem;
+  }
+
+  .read-more {
+    margin-top: auto;
+    font-weight: 600;
+  }
+
+  .badge {
+    background: #fff3c4;
+    color: #5a4a00;
+    border-radius: 999px;
+    padding: 0.05rem 0.6rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+</style>

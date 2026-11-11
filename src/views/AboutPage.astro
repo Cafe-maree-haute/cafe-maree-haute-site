@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PhotoSpot from '../components/PhotoSpot.astro';
+import { type Lang } from '../i18n/ui';
+import { site } from '../data/site';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+// PLACEHOLDER STORY: rewrite these paragraphs in your own words.
+// Anything in [square brackets] needs a real detail.
+const copy = {
+  en: {
+    title: 'Our story',
+    description: 'The story of Café Marée Haute, a small seaside café in Shediac, New Brunswick.',
+    paragraphs: [
+      'Café Marée Haute opened in Shediac in [year]. We wanted a simple place to get a good cup of coffee, something fresh from the oven and a bowl of soup.',
+      'Our name means high tide. When the water comes back into Shediac Bay, the whole shore seems a little brighter. We hope you feel some of that when you walk through our door.',
+      'We buy our coffee from a roaster close to home, and we bake every morning. The soup changes every day, depending on the season and what we find. [Add a line about your team or your family here.]',
+      'Whether you live down the road or you’re here for the summer, make yourself at home. We’re glad you came.',
+    ],
+    photoAlt: 'The people behind the counter',
+  },
+  fr: {
+    title: 'Notre histoire',
+    description: 'L’histoire du Café Marée Haute, un petit café au bord de la mer à Shediac, au Nouveau-Brunswick.',
+    paragraphs: [
+      'Café Marée Haute a ouvert ses portes à Shediac en [année]. On voulait un endroit simple pour prendre un bon café, quelque chose de frais sorti du four et un bol de soupe.',
+      'Quand la mer remonte dans la baie de Shediac, toute la côte a l’air un peu plus lumineuse. C’est ce sentiment-là qu’on espère vous faire vivre quand vous entrez chez nous.',
+      'On achète notre café chez un torréfacteur de la région et on fait nos pâtisseries chaque matin. La soupe change tous les jours, selon la saison et ce qu’on trouve. [Ajoutez ici un mot sur votre équipe ou votre famille.]',
+      'Que vous restiez au bout du chemin ou que vous soyez ici pour l’été, installez-vous. On est contents de vous voir.',
+    ],
+    photoAlt: 'L’équipe derrière le comptoir',
+  },
+}[lang];
+---
+
+<BaseLayout lang={lang} title={copy.title} description={copy.description} page="about">
+  <section class="section">
+    <div class="container grid-2">
+      <div>
+        <h1>{copy.title}</h1>
+        {copy.paragraphs.map((p) => <p>{p}</p>)}
+      </div>
+      <PhotoSpot lang={lang} src={site.photos.about} alt={copy.photoAlt} ratio="4 / 5" />
+    </div>
+  </section>
+</BaseLayout>

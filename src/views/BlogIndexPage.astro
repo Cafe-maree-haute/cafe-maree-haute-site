@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostGrid from '../components/PostGrid.astro';
+import { type Lang } from '../i18n/ui';
+import { getPosts } from '../lib/posts';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const posts = await getPosts(lang);
+
+const copy = {
+  en: {
+    title: 'Blog',
+    description: 'News from Café Marée Haute, seasonal recipes and the people behind the counter.',
+    lead: 'News from the café, seasonal recipes and the people behind the counter.',
+  },
+  fr: {
+    title: 'Blogue',
+    description: 'Des nouvelles du Café Marée Haute, des recettes de saison et les gens derrière le comptoir.',
+    lead: 'Des nouvelles du café, des recettes de saison et les gens derrière le comptoir.',
+  },
+}[lang];
+---
+
+<BaseLayout lang={lang} title={copy.title} description={copy.description} page="blog">
+  <section class="section">
+    <div class="container">
+      <h1>{copy.title}</h1>
+      <p class="lead narrow">{copy.lead}</p>
+      <PostGrid posts={posts} lang={lang} />
+    </div>
+  </section>
+</BaseLayout>

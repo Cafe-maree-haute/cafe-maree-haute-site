@@ -1,0 +1,130 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PhotoSpot from '../components/PhotoSpot.astro';
+import { formatPrice, type Lang } from '../i18n/ui';
+import { site } from '../data/site';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const sections = (await getCollection('menu')).sort((a, b) => a.data.order - b.data.order);
+
+const copy = {
+  en: {
+    title: 'Menu',
+    description: 'Coffee, house-made pastries and our soup of the day at Café Marée Haute in Shediac.',
+    lead: 'Simple food, made with care. Ask us about today’s soup.',
+    photoAlt: 'Coffee and pastries on the counter',
+  },
+  fr: {
+    title: 'Menu',
+    description: 'Café, pâtisseries maison et soupe du jour au Café Marée Haute à Shediac.',
+    lead: 'Des choses simples, faites avec soin. Demandez-nous la soupe du jour.',
+    photoAlt: 'Du café et des pâtisseries sur le comptoir',
+  },
+}[lang];
+---
+
+<BaseLayout lang={lang} title={copy.title} description={copy.description} page="menu">
+  <section class="section">
+    <div class="container grid-2">
+      <div>
+        <h1>{copy.title}</h1>
+        <p class="lead">{copy.lead}</p>
+      </div>
+      <PhotoSpot lang={lang} src={site.photos.menu} alt={copy.photoAlt} ratio="16 / 9" />
+    </div>
+  </section>
+
+  <div class="container menu">
+    {
+      sections.map(({ data }) => {
+        const note = lang === 'fr' ? data.note_fr : data.note_en;
+        return (
+          <section class="menu-section card">
+            <h2>{lang === 'fr' ? data.title_fr : data.title_en}</h2>
+            {note && <p class="note">{note}</p>}
+            <ul>
+              {data.items.map((item) => {
+                const desc = lang === 'fr' ? item.description_fr : item.description_en;
+                return (
+                  <li>
+                    <div class="item-line">
+                      <span class="item-name">{lang === 'fr' ? item.name_fr : item.name_en}</span>
+                      <span class="dots" aria-hidden="true" />
+                      <span class="price">{formatPrice(item.price, lang)}</span>
+                    </div>
+                    {desc && <p class="desc">{desc}</p>}
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        );
+      })
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .menu {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 56rem) {
+    .menu {
+      grid-template-columns: repeat(3, 1fr);
+      align-items: start;
+    }
+  }
+
+  .menu-section h2 {
+    margin-top: 0;
+  }
+
+  .note {
+    color: var(--muted);
+    margin-top: 0;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    padding: 0.6rem 0;
+  }
+
+  .item-line {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .item-name {
+    font-weight: 600;
+  }
+
+  .dots {
+    flex: 1;
+    border-bottom: 2px dotted var(--line);
+    transform: translateY(-0.25em);
+  }
+
+  .price {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .desc {
+    margin: 0.15rem 0 0;
+    font-size: 0.95rem;
+    color: var(--muted);
+  }
+</style>

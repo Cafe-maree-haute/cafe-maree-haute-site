@@ -1,0 +1,224 @@
+---
+import '../styles/global.css';
+import { routes, t, otherLang, type Lang, type PageKey } from '../i18n/ui';
+import { site, hoursSummary } from '../data/site';
+import { showDrafts } from '../lib/posts';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description?: string;
+  /** Which page this is, so the menu and language button know where to point. */
+  page: PageKey;
+  /** Address of this same page in the other language, when it differs from the usual one. */
+  altHref?: string;
+}
+
+const { lang, title, description = '', page, altHref } = Astro.props;
+const other = otherLang(lang);
+const switchHref = altHref ?? routes[page][other];
+const fullTitle = page === 'home' ? `${site.name} | ${title}` : `${title} | ${site.name}`;
+const nav: PageKey[] = ['home', 'menu', 'about', 'blog', 'contact'];
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang={lang === 'fr' ? 'fr-CA' : 'en-CA'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    {description && <meta name="description" content={description} />}
+    <meta name="theme-color" content="#2f5f7f" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" hreflang={other === 'fr' ? 'fr-CA' : 'en-CA'} href={switchHref} />
+    {showDrafts && <meta name="robots" content="noindex" />}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t(lang, 'skip')}</a>
+
+    {
+      showDrafts && (
+        <div class="draft-banner" role="status">
+          {t(lang, 'draft.banner')}
+        </div>
+      )
+    }
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href={routes.home[lang]}>
+          <span class="brand-name">{site.name}</span>
+          <span class="brand-town">Shediac</span>
+        </a>
+        <a class="lang-switch" href={switchHref} hreflang={other} lang={other} aria-label={t(lang, 'lang.switchLabel')}>
+          {t(lang, 'lang.switch')}
+        </a>
+      </div>
+      <nav class="container site-nav" aria-label={lang === 'fr' ? 'Menu principal' : 'Main menu'}>
+        <ul>
+          {
+            nav.map((key) => (
+              <li>
+                <a href={routes[key][lang]} aria-current={key === page ? 'page' : undefined}>
+                  {t(lang, `nav.${key}`)}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <p class="footer-name">{site.name}</p>
+          <p>{t(lang, 'footer.tagline')}</p>
+        </div>
+        <div>
+          <p>{hoursSummary[lang]}</p>
+          <p>
+            {site.address.street}, {site.address.city}
+            <br />
+            <a href={`tel:${site.phone.replace(/[^0-9+]/g, '')}`}>{site.phone}</a>
+            <br />
+            <a href={`mailto:${site.email}`}>{site.email}</a>
+          </p>
+        </div>
+      </div>
+      <p class="container copyright">© {year} {site.name}</p>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .draft-banner {
+    background: #fff3c4;
+    color: #5a4a00;
+    border-bottom: 1px solid #e8d48a;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 0.5rem 1rem;
+  }
+
+  .site-header {
+    background: var(--light);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    line-height: 1.1;
+  }
+
+  .brand-name {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--sea-deep);
+  }
+
+  .brand-town {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .lang-switch {
+    flex-shrink: 0;
+    border: 1.5px solid var(--sea);
+    border-radius: 999px;
+    padding: 0.45rem 1rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .lang-switch:hover {
+    background: var(--sea);
+    color: #fff;
+  }
+
+  .site-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .site-nav a {
+    display: inline-block;
+    padding: 0.6rem 0.55rem;
+    text-decoration: none;
+    color: var(--ink);
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+  }
+
+  .site-nav li:first-child a {
+    padding-left: 0;
+  }
+
+  .site-nav a[aria-current='page'] {
+    color: var(--sea);
+    border-bottom-color: var(--seafoam);
+  }
+
+  .site-footer {
+    margin-top: 3rem;
+    background: var(--sea-deep);
+    color: #e9eef1;
+    padding: 2.5rem 0 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .site-footer a {
+    color: #fff;
+  }
+
+  .footer-inner {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 48rem) {
+    .footer-inner {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .footer-name {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    color: #fff;
+    margin-bottom: 0;
+  }
+
+  .copyright {
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    opacity: 0.75;
+  }
+</style>

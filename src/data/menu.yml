@@ -1,0 +1,66 @@
+# Menu for Café Marée Haute.
+# Prices are placeholders: change them any time (here or in Pages CMS).
+coffee:
+  order: 1
+  title_en: Coffee
+  title_fr: Café
+  note_en: Our coffee is roasted locally.
+  note_fr: Notre café est torréfié tout près d'ici.
+  items:
+    - name_en: Drip coffee
+      name_fr: Café filtre
+      description_en: Our house blend, fresh all day.
+      description_fr: Notre mélange maison, frais toute la journée.
+      price: "3.00"
+    - name_en: Espresso
+      name_fr: Espresso
+      price: "3.25"
+    - name_en: Americano
+      name_fr: Americano
+      price: "3.50"
+    - name_en: Cappuccino
+      name_fr: Cappuccino
+      price: "4.50"
+    - name_en: Latte
+      name_fr: Latté
+      price: "4.75"
+    - name_en: Tea
+      name_fr: Thé
+      description_en: Ask what we have in today.
+      description_fr: Demandez-nous ce qu'on a aujourd'hui.
+      price: "3.00"
+pastries:
+  order: 2
+  title_en: Pastries
+  title_fr: Pâtisseries
+  note_en: Baked here every morning. When they're gone, they're gone.
+  note_fr: Faites ici chaque matin. Quand il n'y en a plus, il n'y en a plus.
+  items:
+    - name_en: Butter croissant
+      name_fr: Croissant au beurre
+      price: "3.75"
+    - name_en: Muffin of the day
+      name_fr: Muffin du jour
+      price: "3.50"
+    - name_en: Cinnamon roll
+      name_fr: Roulé à la cannelle
+      price: "4.25"
+    - name_en: Scone
+      name_fr: Scone
+      price: "3.75"
+    - name_en: Molasses cookie
+      name_fr: Galette à la mélasse
+      price: "2.50"
+soup:
+  order: 3
+  title_en: Soup of the day
+  title_fr: Soupe du jour
+  note_en: A different soup every day, served with bread. Ask us what's on today.
+  note_fr: Une soupe différente chaque jour, servie avec du pain. Demandez-nous celle d'aujourd'hui.
+  items:
+    - name_en: Cup
+      name_fr: Tasse
+      price: "5.50"
+    - name_en: Bowl
+      name_fr: Bol
+      price: "8.50"
